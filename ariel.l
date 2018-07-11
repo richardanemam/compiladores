@@ -5,6 +5,8 @@
 #define SIMBOLO_ABRECHAVE 3
 #define SIMBOLO_FECHACHAVE 4
 #define SIMBOLO_IGUAL 5
+#define SIMBOLO_IGUALDADE 6
+#define SIMBOLO_DIFERENTE 7
 //#define SIMBOLO_PV 3
 
 int palavra_reservada(char pal[]);
@@ -30,9 +32,11 @@ inteiro {digito}+
 
 {inteiro} {printf("%s - %s\n", yytext,"INT");}
 
-"{" {return (SIMBOLO_ABRECHAVE);}
-"}" {return (SIMBOLO_FECHACHAVE);}
-"=" {return (SIMBOLO_IGUAL);}
+"{" { return (SIMBOLO_ABRECHAVE); }
+"}" { return (SIMBOLO_FECHACHAVE); }
+"=" { return (SIMBOLO_IGUAL); }
+"==" { return (SIMBOLO_IGUALDADE) }
+"!=" { return (SIMBOLO_DIFERENTE); }
 . {printf("%s - %s\n", yytext, "ERRO");}
 
 %%
