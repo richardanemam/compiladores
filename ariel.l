@@ -47,6 +47,10 @@ int palavra_reservada(char pal[])
      (!strcmp(pal, "def"))   ||
      (!strcmp(pal, "import"))||
      (!strcmp(pal, "from"))
+     (!strcmp(pal, "class"))
+     (!strcmp(pal, "return"))
+     (!strcmp(pal, "while"))
+     (!strcmp(pal, "for")))
   return(1);
  else
   return(0);
