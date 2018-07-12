@@ -53,11 +53,11 @@ int palavra_reservada(char pal[])
  if ((!strcmp(pal, "Ariel")) ||
      (!strcmp(pal, "def"))   ||
      (!strcmp(pal, "import"))||
-     (!strcmp(pal, "from"))
-     (!strcmp(pal, "class"))
-     (!strcmp(pal, "return"))
-     (!strcmp(pal, "while"))
-     (!strcmp(pal, "for")))
+     (!strcmp(pal, "from"))  ||
+     (!strcmp(pal, "class")) ||
+     (!strcmp(pal, "return"))||
+     (!strcmp(pal, "while")) ||
+     (!strcmp(pal, "for")))  
   return(1);
  else
   return(0);
