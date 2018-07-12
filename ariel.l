@@ -50,7 +50,7 @@ inteiro {digito}+
 
 int palavra_reservada(char pal[])
 {
- if ((!strcmp(pal, "Ariel")) ||
+ if (((!strcmp(pal, "Ariel")) ||
      (!strcmp(pal, "def"))   ||
      (!strcmp(pal, "import"))||
      (!strcmp(pal, "from"))  ||
@@ -61,7 +61,8 @@ int palavra_reservada(char pal[])
      (!strcmp(pal, "else"))  ||
      (!strcmp(pal, "for"))   ||
      (!strcmp(pal, "and"))   ||
-     (!strcmp(pal, "or")))  
+     (!strcmp(pal, "or")))   ||
+     (!strcmp(pal, "var")))
   return(1);
  else
   return(0);
