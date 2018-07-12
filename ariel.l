@@ -7,6 +7,10 @@
 #define SIMBOLO_IGUAL 5
 #define SIMBOLO_IGUALDADE 6
 #define SIMBOLO_DIFERENTE 7
+#define SIMBOLO_MAIOR 8
+#define SIMBOLO_MENOR 9
+#define SIMBOLO_MAIORIGUAL 10
+#define SIMBOLO_MENORIGUAL 11 
 //#define SIMBOLO_PV 3
 
 int palavra_reservada(char pal[]);
@@ -35,8 +39,12 @@ inteiro {digito}+
 "{" { return (SIMBOLO_ABRECHAVE); }
 "}" { return (SIMBOLO_FECHACHAVE); }
 "=" { return (SIMBOLO_IGUAL); }
-"==" { return (SIMBOLO_IGUALDADE) }
+"==" { return (SIMBOLO_IGUALDADE); }
 "!=" { return (SIMBOLO_DIFERENTE); }
+">" { return (SIMBOLO_MAIOR); }
+"<" { return (SIMBOLO_MENOR); }
+">=" { return (SIMBOLO_MAIORIGUAL); }
+"<=" { return (SIMBOLO_MENORIGUAL); }
 . {printf("%s - %s\n", yytext, "ERRO");}
 
 %%
