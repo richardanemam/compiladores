@@ -18,7 +18,6 @@ int palavra_reservada(char pal[]);
 %}
 
 
-%%
 digito [0-9]
 letra [a-zA-Z]
 id {letra}({letra}|{digito})*
