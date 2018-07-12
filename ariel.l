@@ -57,9 +57,11 @@ int palavra_reservada(char pal[])
      (!strcmp(pal, "class")) ||
      (!strcmp(pal, "return"))||
      (!strcmp(pal, "while")) ||
-     (!strcmp(pal, "if"))||
-     (!strcmp(pal, "else")) ||
-     (!strcmp(pal, "for")))  
+     (!strcmp(pal, "if"))    ||
+     (!strcmp(pal, "else"))  ||
+     (!strcmp(pal, "for"))   ||
+     (!strcmp(pal, "and"))   ||
+     (!strcmp(pal, "or")))  
   return(1);
  else
   return(0);
