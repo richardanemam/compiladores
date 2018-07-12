@@ -11,7 +11,6 @@
 #define SIMBOLO_MENOR 9
 #define SIMBOLO_MAIORIGUAL 10
 #define SIMBOLO_MENORIGUAL 11 
-//#define SIMBOLO_PV 3
 
 int palavra_reservada(char pal[]);
 
@@ -62,7 +61,7 @@ int palavra_reservada(char pal[])
      (!strcmp(pal, "for"))   ||
      (!strcmp(pal, "and"))   ||
      (!strcmp(pal, "or")))   ||
-     (!strcmp(pal, "print"))||
+     (!strcmp(pal, "print")) ||
      (!strcmp(pal, "var")))
   return(1);
  else
