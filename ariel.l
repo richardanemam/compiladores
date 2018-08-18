@@ -1,101 +1,51 @@
 %{
-#include <stdio.h>
-#define SIMBOLO_PALAVRA_RESERVADA 1
-#define SIMBOLO_ID 2
-#define SIMBOLO_ABRECHAVE 3
-#define SIMBOLO_FECHACHAVE 4
-#define SIMBOLO_IGUAL 5
-#define SIMBOLO_IGUALDADE 6
-#define SIMBOLO_DIFERENTE 7
-#define SIMBOLO_MAIOR 8
-#define SIMBOLO_MENOR 9
-#define SIMBOLO_MAIORIGUAL 10
-#define SIMBOLO_MENORIGUAL 11 
+  #include <stdio.h>
+  #include <stdlib.h>
 
-int palavra_reservada(char pal[]);
-
+  #include "calc02.tab.h"
+  
+  void abrirArquivo();
+  
 %}
 
-
+espaco [ \t]+
 digito [0-9]
-letra [a-zA-Z]
-id {letra}({letra}|{digito})*
 inteiro {digito}+
+exponente [eE][+-]?{inteiro}
+real {inteiro}("."{inteiro})?{exponente}?
+
+%option yylineno
 
 %%
 
-
-{id} {
-   if (palavra_reservada(yytext))
-    return(SIMBOLO_PALAVRA_RESERVADA);
-   else
-    return(SIMBOLO_ID);
-  }
-
-{inteiro} {printf("%s - %s\n", yytext,"INT");}
-
-"{" { return (SIMBOLO_ABRECHAVE); }
-"}" { return (SIMBOLO_FECHACHAVE); }
-"=" { return (SIMBOLO_IGUAL); }
-"==" { return (SIMBOLO_IGUALDADE); }
-"!=" { return (SIMBOLO_DIFERENTE); }
-">" { return (SIMBOLO_MAIOR); }
-"<" { return (SIMBOLO_MENOR); }
-">=" { return (SIMBOLO_MAIORIGUAL); }
-"<=" { return (SIMBOLO_MENORIGUAL); }
-. {printf("%s - %s\n", yytext, "ERRO");}
+[a-z]     { yyval.vi = yytext - 'a'; return VARIAVEL; }
+{espaco}  { /* faz nada */ }
+{real}    { yylval.vd = atof(yytext);  return NUMERO;}
+"+"       { return ADICAO; }
+"-"       { return SUBTRACAO; }
+"*"       { return MULTIPLICACAO; }
+"("       { return ABRE_PAR; }
+")"       { return FECHA_PAR; }
+"/"       { return DIVISAO; }
+"^"       { return POTENCIACAO; }
+"%"       { return RESTO; }
+"="       { return IGUAL; }
+fat|FAT   {return FATORIAL; }
+abs|ABS   { return MODULO; }
+cos|COS   { return COSSENO; }
+sen|SEN   { return SENO; }
+tan|TAN   { return TANGENTE; }
+log|LOG   { return LOG; }
+sqrt|SQRT { return RAIZ; }
+cubo|CUBO { return CUBO; }
+quadrado|QUADRADO  { return QUADRADO; }
+e         { return EXP; }
+"\n"      { return FIM; }
+.         { printf("Erro lexico : %s\n",yytext); }
 
 %%
 
-int palavra_reservada(char pal[])
+void abrirArquivo()
 {
- if (((!strcmp(pal, "Ariel")) ||
-     (!strcmp(pal, "def"))   ||
-     (!strcmp(pal, "import"))||
-     (!strcmp(pal, "from"))  ||
-     (!strcmp(pal, "class")) ||
-     (!strcmp(pal, "return"))||
-     (!strcmp(pal, "while")) ||
-     (!strcmp(pal, "if"))    ||
-     (!strcmp(pal, "else"))  ||
-     (!strcmp(pal, "for"))   ||
-     (!strcmp(pal, "and"))   ||
-     (!strcmp(pal, "or")))   ||
-     (!strcmp(pal, "print")) ||
-     (!strcmp(pal, "var")))
-  return(1);
- else
-  return(0);
-}
-
-const char *getString(int codigo)
-{
- switch(codigo) {
-   case SIMBOLO_PALAVRA_RESERVADA:
-     return "PALAVRA_RESERVADA";
-   case SIMBOLO_ID:
-     return "ID";
-   case SIMBOLO_ABRECHAVE:
-     return "ABRE_CHAVE";
-   case SIMBOLO_FECHACHAVE:
-        return "FECHA_CHAVE";
-   default:
-     return "INVALIDO";
-  }
-}
-
-int main()
-{
- int codigo, contador = 0;
-
- while (codigo = yylex())
- {
-  printf("%s - %s\n", yytext, getString(codigo));
-  contador++;
- }
-
- printf("\n%d chamadas a yylex\n", contador);
- 
- return 0;
-
+  yyin = fopen("entradas.txt", "r");
 }
