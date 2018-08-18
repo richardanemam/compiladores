@@ -37,8 +37,6 @@ sen|SEN   { return SENO; }
 tan|TAN   { return TANGENTE; }
 log|LOG   { return LOG; }
 sqrt|SQRT { return RAIZ; }
-cubo|CUBO { return CUBO; }
-quadrado|QUADRADO  { return QUADRADO; }
 e         { return EXP; }
 "\n"      { return FIM; }
 .         { printf("Erro lexico : %s\n",yytext); }
