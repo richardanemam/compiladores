@@ -8,11 +8,14 @@
   
 %}
 
-espaco [ \t]+
-digito [0-9]
-inteiro {digito}+
-exponente [eE][+-]?{inteiro}
-real {inteiro}("."{inteiro})?{exponente}?
+digit [0-9]
+letter [a-zA-Z]
+integer {digito}+
+exponente [eE][+-]?{integer}
+real {integer}("."{integer})?{exponente}?
+identifier  {letter}+
+newline     \n
+espaco  [ \t]+
 
 %option yylineno
 
@@ -30,6 +33,39 @@ real {inteiro}("."{inteiro})?{exponente}?
 "^"       { return POTENCIACAO; }
 "%"       { return RESTO; }
 "="       { return IGUAL; }
+
+"<"             {return LT;}
+"<="            {return LE;}
+">"             {return GT;}
+">="             {return GE;}
+"=="             {return EQ;}
+"!="             {return NE;}
+"="             {return ASSIGN;}
+";"             {return SEMI;}
+","             {return COMMA;}
+"["             {return LBRACKET;}
+"]"             {return RBRACKET;}
+"{"             {return LBRACE;}
+"}"             {return RBRACE;}
+{number}        {return NUM;}
+{identifier}    {return ID;}
+{newline}       {lineno++;}
+"/*"            { char c;
+                  while (1) {
+                    c = input();
+                    if (c == EOF) break;
+                    if (c == '\n') lineno++;
+                    while ((c = input()) == '*');
+                    if (c == '/') break;
+                  }
+                }
+"if"            {return IF;}
+"else"          {return ELSE;}
+"end"           {return END;}
+"int"           {return INT;}
+"void"          {return VOID;}
+"return"        {return RETURN;}
+"while"         {return WHILE;}
 fat|FAT   {return FATORIAL; }
 abs|ABS   { return MODULO; }
 cos|COS   { return COSSENO; }
