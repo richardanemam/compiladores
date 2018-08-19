@@ -1,6 +1,7 @@
 %{
   #include <stdio.h>
   #include <math.h>
+  #include <ctype.h>
   
   void yyerror(char *);
   int yylex();
@@ -28,11 +29,10 @@
 %token ABRE_PAR FECHA_PAR
 %left  NEGATIVO
 %right POTENCIACAO
-%token FIM
 %token ERROR
 
 %type <vd> expr
-%type <vi> expr
+
 
 %%
 
@@ -55,15 +55,15 @@ expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
                                                else
                                                  $$ = $1 / $3; 
                                              }
-          | RAIZ ABRE_PAR expr FECHA_PAR     { $$ = sqrt($2); }
-          | SENO ABRE_PAR expr FECHA_PAR     { $$ = sin($2); }
-          | COSSENO ABRE_PAR expr FECHA_PAR  { $$ = cos($2); }
-          | TANGENTE ABRE_PAR expr FECHA_PAR { $$ = tan($2); }
-          | LOG ABRE_PAR expr FECHA_PAR      { $$ = log($2); }
+          | RAIZ ABRE_PAR expr FECHA_PAR     { $$ = sqrt($3); }
+          | SENO ABRE_PAR expr FECHA_PAR     { $$ = sin($3); }
+          | COSSENO ABRE_PAR expr FECHA_PAR  { $$ = cos($3); }
+          | TANGENTE ABRE_PAR expr FECHA_PAR { $$ = tan($3); }
+          | LOG ABRE_PAR expr FECHA_PAR      { $$ = log($3); }
           | expr RESTO expr                  { $$ = fmod($1, $3); }
-          | MODULO ABRE_PAR expr FECHA_PAR   { $$ = fabs($2); }
+          | MODULO ABRE_PAR expr FECHA_PAR   { $$ = fabs($3); }
           | FATORIAL ABRE_PAR expr FECHA_PAR { int r=1;
-                                               for (int i = 1; i <= $2; i++)
+                                               for (int i = 1; i <= $3; i++)
                                                  r*=i;
                                                $$ = r;
                                              }
@@ -79,6 +79,21 @@ void yyerror(char *msg)
  extern char *yytext;
  
  fprintf(stderr, "Erro: %s no simbolo '%s' na linha %d\n", msg, yytext, yylineno);
+}
+
+int yylex()
+{
+
+  int c;
+  c = getChar();
+  
+  if (isDigit(c)) {
+    yylval = c-'0';
+    return NUMBER;
+  }
+  
+  return c;
+  
 }
 
 int main()
