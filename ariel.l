@@ -10,7 +10,7 @@
 
 digit [0-9]
 letter [a-zA-Z]
-integer {digito}+
+integer {digit}+
 exponente [eE][+-]?{integer}
 real {integer}("."{integer})?{exponente}?
 identifier  {letter}+
@@ -21,6 +21,21 @@ espaco  [ \t]+
 
 %%
 
+
+if           { return IF; }
+else         { return ELSE; }
+int          { return INT; }
+void         { return VOID; }
+return       { return RETURN; }
+while        { return WHILE; }
+fat|FAT      { return FATORIAL; }
+abs|ABS      { return MODULO; }
+cos|COS      { return COSSENO; }
+sen|SEN      { return SENO; }
+tan|TAN      { return TANGENTE; }
+log|LOG      { return LOG; }
+sqrt|SQRT    { return RAIZ; }
+e            { return EXP; }
 {identifier} { yyval.vi = yytext - 'a'; return VARIAVEL; }
 {espaco}     { /* faz nada */ }
 {real}       { yylval.vd = atof(yytext);  return NUMERO;}
@@ -33,45 +48,28 @@ espaco  [ \t]+
 "^"          { return POTENCIACAO; }
 "%"          { return RESTO; }
 "="          { return IGUAL; }
-"<"          {return LT; }
-"<="         {return LE; }
-">"          {return GT; }
-">="         {return GE; }
-"=="         {return EQ; }
-"!="         {return NE; }
-"="          {return ASSIGN; }
-";"          {return SEMI; }
-","          {return COMMA; }
-"["          {return LBRACKET; }
-"]"          {return RBRACKET; }
-"{"          {return LBRACE; }
-"}"          {return RBRACE; }
-{number}     {return NUM; }
-{newline}    {lineno++; }
-"/*"         { char c;
+"<"          { return LT; }
+"<="         { return LE; }
+">"          { return GT; }
+">="         { return GE; }
+"=="         { return EQ; }
+"!="         { return NE; }
+";"          { return SEMI; }
+","          { return COMMA; }
+"["          { return LBRACKET; }
+"]"          { return RBRACKET; }
+"{"          { return LBRACE; }
+"}"          { return RBRACE; }
+{newline}    { lineno++; }
+"/*"         { /*char c;
                while (1) {
                  c = input();
                  if (c == EOF) break;
                  if (c == '\n') lineno++;
                  while ((c = input()) == '*');
                  if (c == '/') break;
-               }
+               }*/
              }
-"if"         { return IF; }
-"else"       { return ELSE; }
-"int"        { return INT; }
-"void"       { return VOID; }
-"return"     { return RETURN; }
-"while"      { return WHILE; }
-fat|FAT      { return FATORIAL; }
-abs|ABS      { return MODULO; }
-cos|COS      { return COSSENO; }
-sen|SEN      { return SENO; }
-tan|TAN      { return TANGENTE; }
-log|LOG      { return LOG; }
-sqrt|SQRT    { return RAIZ; }
-e            { return EXP; }
-"\n"         { return FIM; }
 .            { printf("Erro lexico : %s\n",yytext); return ERROR;}
 
 %%
