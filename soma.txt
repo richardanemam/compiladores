@@ -1,1 +1,3 @@
-soma = 10 + 2;
+Ariel
+
+num=1
