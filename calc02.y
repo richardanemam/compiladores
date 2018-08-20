@@ -24,7 +24,7 @@
 %token MODULO COSSENO SENO TANGENTE LOG RAIZ EXP FATORIAL
 %left  RESTO
 %left  ADICAO SUBTRACAO
-%left  MULTIPLICACAO DIVISAO COMMA
+%left  MULTIPLICACAO DIVISAO COMMA SEMI
 %right IGUAL
 %token ABRE_PAR FECHA_PAR
 %left  NEGATIVO
@@ -43,14 +43,10 @@ resultado : FIM
           | expr FIM  { printf("Resultado: %.2f\n", $1); }
           | error FIM { yyerror("ignorar..."); }
           ;
-stmts     : if_stmts
-          |
-          ;
 expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
           | LBRACE expr RBRACE               { $$ = $2; }
           | LBRACKET expr RBRACKET           { $$ = $2; }
           | ABRE_PAR expr COMMA expr FECHA_PAR { $$ = ($2,$4); }
-          | LBRACE expr COMMA expr RBRACE      { $$ = [$2,$4]; }
           | LBRACKET expr COMMA expr RBRACKET  { $$ = {$2,$4}; }
           | VARIAVEL IGUAL expr              { variaveis[$1] = $3; }
           | expr ADICAO expr                 { $$ = $1 + $3; }
@@ -78,11 +74,19 @@ expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
           | EXP                              { $$ =  exp(1); }
           | NUMERO                           { $$ = $1; }
           ;
-if_stmt   : IF ABRE_PAR expr FECHA_PAR LBRACE stmts RBRACE
-          | IF ABRE_PAR expr FECHA_PAR LBRACE stmts RBRACE ELSE LBRACE stmts RBRACE
-          | ELSE IF ABRE_PAR expr FECHA_PAR LBRACE stmts RBRACE
-;
-
+if_stmt   : IF ABRE_PAR expr FECHA_PAR LBRACE stmt RBRACE
+          | IF ABRE_PAR expr FECHA_PAR LBRACE stmt RBRACE ELSE LBRACE stmt RBRACE
+          | ELSE IF ABRE_PAR expr FECHA_PAR LBRACE stmt RBRACE
+          ;
+stmt      :	WhileStmt
+	        | expr
+	        | ForStmt
+	        | if_stmt 
+          ;
+WhileStmt : WHILE ABRE_PAR expr FECHA_PAR LBRACE stmt RBRACE 
+          ;
+ForStmt   : FOR ABRE_PAR expr SEMI expr SEMI expr FECHA_PAR LBRACE stmt RBRACE
+          ;
 
 %%
 
@@ -103,7 +107,7 @@ int yylex()
 
   if (isDigit(c)) {
     yylval = c-'0';
-    return NUMBER;
+    return NUMERO;
   }
 
   return c;
