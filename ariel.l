@@ -107,5 +107,5 @@ int palavra_reservada(char pal[])
 
 void abrirArquivo()
 {
-  yyin = fopen("teste.py", "r");
+  yyin = fopen("teste.txt", "r");
 }

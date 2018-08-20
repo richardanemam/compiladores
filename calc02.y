@@ -47,7 +47,6 @@ expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
           | LBRACE expr RBRACE               { $$ = $2; }
           | LBRACKET expr RBRACKET           { $$ = $2; }
           | ABRE_PAR expr COMMA expr FECHA_PAR { $$ = ($2,$4); }
-          | LBRACKET expr COMMA expr RBRACKET  { $$ = {$2,$4}; }
           | VARIAVEL IGUAL expr              { variaveis[$1] = $3; }
           | expr ADICAO expr                 { $$ = $1 + $3; }
           | expr SUBTRACAO expr              { $$ = $1 - $3; }
@@ -99,20 +98,6 @@ void yyerror(char *msg)
 }
 
 
-int yylex()
-{
-
-  int c;
-  c = getChar();
-
-  if (isDigit(c)) {
-    yylval = c-'0';
-    return NUMERO;
-  }
-
-  return c;
-
-}
 
 
 int main()
