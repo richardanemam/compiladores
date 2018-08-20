@@ -2,7 +2,7 @@
   #include <stdio.h>
   #include <math.h>
   #include <ctype.h>
-  
+
   void yyerror(char *);
   int yylex();
   void abrirArquivo();
@@ -42,18 +42,21 @@ entrada   : /* vazia */
 resultado : FIM
           | expr FIM { printf("Resultado: %.2f\n", $1); }
           | error FIM { yyerror("ignorar..."); }
-          ;          
+          ;
+stmts     : if_stmts
+          |
+          ;
 expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
           | VARIAVEL IGUAL expr              { variaveis[$1] = $3; }
           | expr ADICAO expr                 { $$ = $1 + $3; }
           | expr SUBTRACAO expr              { $$ = $1 - $3; }
           | SUBTRACAO expr %prec NEGATIVO    { $$ =-$2; }
-          | expr MULTIPLICACAO expr          { $$ = $1 * $3; }          
+          | expr MULTIPLICACAO expr          { $$ = $1 * $3; }
           | expr POTENCIACAO expr            { $$ = pow($1, $3); }
           | expr DIVISAO expr                { if ($3 == 0.0)
-                                                 yyerror("Divisao por 0"); 
+                                                 yyerror("Divisao por 0");
                                                else
-                                                 $$ = $1 / $3; 
+                                                 $$ = $1 / $3;
                                              }
           | RAIZ ABRE_PAR expr FECHA_PAR     { $$ = sqrt($3); }
           | SENO ABRE_PAR expr FECHA_PAR     { $$ = sin($3); }
@@ -70,6 +73,10 @@ expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
           | EXP                              { $$ =  exp(1); }
           | NUMERO                           { $$ = $1; }
           ;
+if_stmt   : IF ABRE_PAR expr FECHA_PAR LBRACE stmts RBRACE
+          | IF ABRE_PAR expr FECHA_PAR LBRACE stmts RBRACE ELSE LBRACE stmts RBRACE
+          | ELSE IF ABRE_PAR expr FECHA_PAR LBRACE stmts RBRACE
+;
 
 %%
 
@@ -77,7 +84,7 @@ void yyerror(char *msg)
 {
  extern int yylineno;
  extern char *yytext;
- 
+
  fprintf(stderr, "Erro: %s no simbolo '%s' na linha %d\n", msg, yytext, yylineno);
 }
 
@@ -86,20 +93,20 @@ int yylex()
 
   int c;
   c = getChar();
-  
+
   if (isDigit(c)) {
     yylval = c-'0';
     return NUMBER;
   }
-  
+
   return c;
-  
+
 }
 
 int main()
 {
  abrirArquivo();
- 
+
  yyparse();
 
  return 0;
