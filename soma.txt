@@ -1,3 +1,0 @@
-Ariel
-
-num=1
