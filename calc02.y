@@ -77,7 +77,6 @@ expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
                                              }
           | EXP                              { $$ =  exp(1); }
           | NUMERO                           { $$ = $1; }
-          | FOR expr IN expr 2PONTOS expr        { $$ = $2; child[0] = $6; }
           ;
 if_stmt   : IF ABRE_PAR expr FECHA_PAR LBRACE stmts RBRACE
           | IF ABRE_PAR expr FECHA_PAR LBRACE stmts RBRACE ELSE LBRACE stmts RBRACE
