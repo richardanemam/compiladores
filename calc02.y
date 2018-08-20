@@ -47,9 +47,9 @@ resultado : FIM
 expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
           | LBRACE expr RBRACE               { $$ = $2; }
           | LBRACKET expr RBRACKET           { $$ = $2; }
-          | ABRE_PAR expr "," expr FECHA_PAR { $$ = ($2,$4); }
-          | LBRACE expr "," expr RBRACE      { $$ = [$2,$4]; }
-          | LBRACKET expr "," expr RBRACKET  { $$ = {$2,$4}; }
+          | ABRE_PAR expr COMMA expr FECHA_PAR { $$ = ($2,$4); }
+          | LBRACE expr COMMA expr RBRACE      { $$ = [$2,$4]; }
+          | LBRACKET expr COMMA expr RBRACKET  { $$ = {$2,$4}; }
           | VARIAVEL IGUAL expr              { variaveis[$1] = $3; }
           | expr ADICAO expr                 { $$ = $1 + $3; }
           | expr SUBTRACAO expr              { $$ = $1 - $3; }
@@ -75,7 +75,7 @@ expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
                                              }
           | EXP                              { $$ =  exp(1); }
           | NUMERO                           { $$ = $1; }
-          | FOR expr IN expr ":"             { $$ = $2; child[0] = $4; }
+          | FOR expr IN expr 2PONTOS expr        { $$ = $2; child[0] = $6; }
           ;
 
 

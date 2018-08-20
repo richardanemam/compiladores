@@ -63,6 +63,7 @@ e            { return EXP; }
 "!="         { return NE; }
 ";"          { return SEMI; }
 ","          { return COMMA; }
+":"          { return 2PONTOS; }
 "["          { return LBRACKET; }
 "]"          { return RBRACKET; }
 "{"          { return LBRACE; }
