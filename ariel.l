@@ -29,6 +29,8 @@ espaco     [ \t]+
 "void"       { return VOID; }
 "return"     { return RETURN; }
 "while"      { return WHILE; }
+"for"        { return FOR; }
+"in"         { return IN; }
 fat|FAT      { return FATORIAL; }
 abs|ABS      { return MODULO; }
 cos|COS      { return COSSENO; }
@@ -37,9 +39,13 @@ tan|TAN      { return TANGENTE; }
 log|LOG      { return LOG; }
 sqrt|SQRT    { return RAIZ; }
 e            { return EXP; }
-{identifier} { return VARIAVEL; }
+{identifier} { if (palavra_reservada(yytext))
+                 return(PAL_RES);
+               else
+                 return VARIAVEL; 
+             }
 {espaco}     { /* faz nada */ }
-{real}       { sscanf(yytext, "%lf", &yylval);  return NUMERO;}
+{real}       { yylval.vd = atof(yytext);  return NUMERO; }
 "+"          { return ADICAO; }
 "-"          { return SUBTRACAO; }
 "*"          { return MULTIPLICACAO; }
@@ -84,6 +90,20 @@ e            { return EXP; }
 .            { printf("Erro lexico : %s\n",yytext); return ERROR;}
 
 %%
+
+
+int palavra_reservada(char pal[])
+{
+ if ((!strcmp(pal, "Ariel")) ||
+     (!strcmp(pal, "def"))   ||
+     (strcmp("import",input))||
+     strcmp("as",input)      ||
+     strcmp("def",input))
+  return(1);
+ else
+  return(0);
+}
+
 
 void abrirArquivo()
 {

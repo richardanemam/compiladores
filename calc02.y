@@ -3,6 +3,7 @@
   #include <math.h>
   #include <ctype.h>
   
+  
   void yyerror(char *);
   int yylex();
   void abrirArquivo();
@@ -15,12 +16,12 @@
  };
 
 %start entrada
-%token INT IF ELSE WHILE FOR VOID RETURN
+%token INT IF ELSE WHILE FOR VOID RETURN PAL_RES IN
 %token <vd> NUMERO
 %token <vi> VARIAVEL
 %token FIM IGUAL
 %token LT LE GT GE EQ NE SEMI
-%token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET
+%token LBRACE RBRACE LBRACKET RBRACKET
 %token MODULO COSSENO SENO TANGENTE LOG RAIZ EXP FATORIAL
 %left  RESTO
 %left  ADICAO SUBTRACAO
@@ -40,10 +41,15 @@ entrada   : /* vazia */
           | entrada resultado
           ;
 resultado : FIM
-          | expr FIM { printf("Resultado: %.2f\n", $1); }
+          | expr FIM  { printf("Resultado: %.2f\n", $1); }
           | error FIM { yyerror("ignorar..."); }
           ;          
 expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
+          | LBRACE expr RBRACE               { $$ = $2; }
+          | LBRACKET expr RBRACKET           { $$ = $2; }
+          | ABRE_PAR expr "," expr FECHA_PAR { $$ = ($2,$4); }
+          | LBRACE expr "," expr RBRACE      { $$ = [$2,$4]; }
+          | LBRACKET expr "," expr RBRACKET  { $$ = {$2,$4}; }
           | VARIAVEL IGUAL expr              { variaveis[$1] = $3; }
           | expr ADICAO expr                 { $$ = $1 + $3; }
           | expr SUBTRACAO expr              { $$ = $1 - $3; }
@@ -69,7 +75,9 @@ expr      : ABRE_PAR expr FECHA_PAR          { $$ = $2; }
                                              }
           | EXP                              { $$ =  exp(1); }
           | NUMERO                           { $$ = $1; }
+          | FOR expr IN expr ":"             { $$ = $2; child[0] = $4; }
           ;
+
 
 %%
 
@@ -81,20 +89,6 @@ void yyerror(char *msg)
  fprintf(stderr, "Erro: %s no simbolo '%s' na linha %d\n", msg, yytext, yylineno);
 }
 
-int yylex()
-{
-
-  int c;
-  c = getChar();
-  
-  if (isDigit(c)) {
-    yylval = c-'0';
-    return NUMBER;
-  }
-  
-  return c;
-  
-}
 
 int main()
 {
